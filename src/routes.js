@@ -1,6 +1,6 @@
 import HomePage from './pages/home.vue';
 import ImagesPage from './pages/images.vue';
-import ThankUPage from './pages/thanku.vue';
+import ThankuPage from './pages/thanku.vue';
 import SorryPage from './pages/sorry.vue';
 
 import PanelRightPage from './pages/panel-right.vue';
@@ -20,7 +20,7 @@ export default [
   },
   {
     path: '/thanku/',
-    component: ThankUPage,
+    component: ThankuPage,
   },
   {
     path: '/sorry/',
