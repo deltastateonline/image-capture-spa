@@ -1,6 +1,5 @@
 <template id="page-home">
-    <!-- Main View -->
-    <f7-view id="main-view" main>
+    <!-- Main View -->   
       <f7-page>
 	  <!--Top Menu -->
         <f7-navbar>          
@@ -70,7 +69,7 @@
         </f7-block>	
 		
       </f7-page>
-    </f7-view>
+ 
 </template>
 <script>
 export default {
