@@ -29,8 +29,8 @@ new Vue({
   template: '<app/>',
   // Init Framework7 by passing parameters here
   framework7: {
-    id: 'io.framework7.testapp', // App bundle ID
-    name: 'Framework7', // App name
+    id: 'io.framework7.imagecapture', // App bundle ID
+    name: 'AAMC Image Capture', // App name
     theme: 'auto', // Automatic theme detection
     // App routes
     routes: Routes,
