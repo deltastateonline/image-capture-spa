@@ -21,7 +21,7 @@
 	  </f7-block-title>
       <f7-block>
 			<f7-swiper pagination navigation scrollbar class="aamc-swiper" >		
-				<f7-swiper-slide v-for="anImage in imagesList">	
+				<f7-swiper-slide v-for="anImage in imagesList" :key="anImage.id">	
 					<div :photoTitle="anImage.photoTitle" :overlayUrl="anImage.overlayUrl">						
 							<div class="swiper-text" >{{anImage.photoTitle}}</div>
 						<label>
@@ -56,13 +56,13 @@ export default {
 	  return {
 		processing : false,
 		imagesList:[
-			{photoTitle:'Registration Plate', overlayUrl:'/static/images/overlays/registration_plate.svg', overlayScale: '1'},
-			{photoTitle:'Odometer', overlayUrl:'/static/images/overlays/odometer.svg', overlayScale: '1'},
-			{photoTitle:'Front Left', overlayUrl:'/static/images/overlays/sedan_front_left.svg', overlayScale: '1.5'},
-			{photoTitle:'Front Right', overlayUrl:'/static/images/overlays/sedan_front_right.svg', overlayScale: '1.5'},
-			{photoTitle:'Rear Left', overlayUrl:'/static/images/overlays/sedan_rear_left.svg', overlayScale: '1.3'},
-			{photoTitle:'Rear Right', overlayUrl:'/static/images/overlays/sedan_rear_right.svg', overlayScale: '1.3'},
-			{photoTitle:'Add More', overlayUrl:'/static/images/add.more.png', overlayScale: '1.3',lastImage:true} 			
+			{id:1,photoTitle:'Registration Plate', overlayUrl:'/static/images/overlays/registration_plate.svg', overlayScale: '1'},
+			{id:2,photoTitle:'Odometer', overlayUrl:'/static/images/overlays/odometer.svg', overlayScale: '1'},
+			{id:3,photoTitle:'Front Left', overlayUrl:'/static/images/overlays/sedan_front_left.svg', overlayScale: '1.5'},
+			{id:4,photoTitle:'Front Right', overlayUrl:'/static/images/overlays/sedan_front_right.svg', overlayScale: '1.5'},
+			{id:5,photoTitle:'Rear Left', overlayUrl:'/static/images/overlays/sedan_rear_left.svg', overlayScale: '1.3'},
+			{id:6,photoTitle:'Rear Right', overlayUrl:'/static/images/overlays/sedan_rear_right.svg', overlayScale: '1.3'},
+			{id:7,photoTitle:'Add More', overlayUrl:'/static/images/add.more.png', overlayScale: '1.3',lastImage:true} 			
 		  ],
 		imagesAdded:[]
 	  }
@@ -81,8 +81,9 @@ export default {
 				 
 				 if(anImage.lastImage != undefined && anImage.lastImage){	
 				 anImage.lastImage = false;
+					var id = self.imagesList.length + 1;
 					 self.imagesList.push(
-						{photoTitle:'Add More', overlayUrl:'/static/images/add.more.png', overlayScale: '1.3',lastImage:true}
+						{id:id, photoTitle:'Add More', overlayUrl:'/static/images/add.more.png', overlayScale: '1.3',lastImage:true}
 					 );				
 				 }
 				self.imagesAdded.push(1);
