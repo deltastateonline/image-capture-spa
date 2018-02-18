@@ -1,7 +1,7 @@
 import HomePage from './pages/home.vue';
-import imagesPage from './pages/images.vue';
-import thankUPage from './pages/thanku.vue';
-import sorryPage from './pages/sorry.vue';
+import ImagesPage from './pages/images.vue';
+import ThankUPage from './pages/thanku.vue';
+import SorryPage from './pages/sorry.vue';
 
 import PanelRightPage from './pages/panel-right.vue';
 
@@ -16,18 +16,18 @@ export default [
   },
   {
     path: '/images/',
-    component: imagesPage,
+    component: ImagesPage,
   },
   {
     path: '/thanku/',
-    component: thankUPage,
+    component: ThankUPage,
   },
   {
     path: '/sorry/',
-    component: sorryPage,
+    component: SorryPage,
   },  
   {
     path: '(.*)',
-    component: sorryPage,
+    component: SorryPage,
   },
 ];
