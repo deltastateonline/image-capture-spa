@@ -1,39 +1,33 @@
 import HomePage from './pages/home.vue';
-import AboutPage from './pages/about.vue';
-import FormPage from './pages/form.vue';
-import DynamicRoutePage from './pages/dynamic-route.vue';
-import NotFoundPage from './pages/not-found.vue';
+import imagesPage from './pages/images.vue';
+import thankUPage from './pages/thanku.vue';
+import sorryPage from './pages/sorry.vue';
 
-import PanelLeftPage from './pages/panel-left.vue';
 import PanelRightPage from './pages/panel-right.vue';
 
 export default [
   {
     path: '/',
     component: HomePage,
-  },
-  {
-    path: '/panel-left/',
-    component: PanelLeftPage,
-  },
+  },  
   {
     path: '/panel-right/',
     component: PanelRightPage,
   },
   {
-    path: '/about/',
-    component: AboutPage,
+    path: '/images/',
+    component: imagesPage,
   },
   {
-    path: '/form/',
-    component: FormPage,
+    path: '/thanku/',
+    component: thankUPage,
   },
   {
-    path: '/dynamic-route/blog/:blogId/post/:postId/',
-    component: DynamicRoutePage,
-  },
+    path: '/sorry/',
+    component: sorryPage,
+  },  
   {
     path: '(.*)',
-    component: NotFoundPage,
+    component: sorryPage,
   },
 ];
