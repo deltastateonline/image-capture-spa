@@ -20,6 +20,9 @@ import Routes from './routes.js'
 // Import App Component
 import App from './app';
 
+// import entire SDK
+import AWS from 'aws-sdk';
+
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue, Framework7)
 
@@ -44,10 +47,22 @@ var mainApp = new Vue({
 			albumBucketName:'deltastateonline-imageuploaded',
 			bucketRegion : 'ap-southeast-2',
 			IdentityPoolId : 'ap-southeast-2:77986df0-8003-44dc-b856-de5209c78add',
-		}		  
+		},
+		s3Object:{}
 	},
-	mounted(){
-		console.log("Load AWS");
+	mounted(){	
+		
+		AWS.config.update({
+		  region: this.bucketRegion,
+		  credentials: new AWS.CognitoIdentityCredentials({
+			IdentityPoolId: this.IdentityPoolId
+		  })
+		});
+		
+		this.s3Object = new AWS.S3({
+		  apiVersion: '2006-03-01',
+		  params: {Bucket: this.albumBucketName}
+		});		
 		
 	}
 });
