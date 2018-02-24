@@ -26,6 +26,7 @@ import AWS from 'aws-sdk';
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue, Framework7)
 
+
 // Init App
 var mainApp = new Vue({
 	el: '#app',
@@ -48,21 +49,22 @@ var mainApp = new Vue({
 			bucketRegion : 'ap-southeast-2',
 			IdentityPoolId : 'ap-southeast-2:77986df0-8003-44dc-b856-de5209c78add',
 		},
-		s3Object:{}
+		s3Object:{},
+		appData:{},
 	},
 	mounted(){	
 		
 		AWS.config.update({
-		  region: this.bucketRegion,
+		  region: this.awsObject.bucketRegion,
 		  credentials: new AWS.CognitoIdentityCredentials({
-			IdentityPoolId: this.IdentityPoolId
+			IdentityPoolId: this.awsObject.IdentityPoolId
 		  })
 		});
 		
 		this.s3Object = new AWS.S3({
 		  apiVersion: '2006-03-01',
-		  params: {Bucket: this.albumBucketName}
+		  params: {Bucket: this.awsObject.albumBucketName}
 		});		
 		
-	}
+	}	
 });

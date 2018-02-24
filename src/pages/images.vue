@@ -1,4 +1,5 @@
 <template>
+<!-- https://scotch.io/tutorials/how-to-handle-file-uploads-in-vue-2 -->
   <f7-page>
       <f7-navbar  back-link="Back">
 		<f7-nav-title>
@@ -42,8 +43,16 @@
 	  <f7-block strong>
 		  <f7-row>            
 			<f7-col width="100">
-			  <f7-button raised fill @click="submitImages">Submit Images</f7-button>
-			  <f7-button raised fill href="/thanku/">Submit Images</f7-button>
+				
+			  <f7-button raised fill @click="submitImages" v-if="!isSaving && canUpload">Submit Images</f7-button>
+			  
+			  <div>
+				<f7-preloader color="green" size="44px" v-if="isSaving"></f7-preloader>
+				Uploading Please Wait ! {{uploadedCount}} of {{imageCount}} Uploaded
+			  </div>
+			  
+			  
+			  <!-- <f7-button raised fill href="/thanku/">Submit Images</f7-button> -->
 			</f7-col>
 		  </f7-row>
 	</f7-block>	  
@@ -58,7 +67,9 @@ export default {
 
  data(){
 	  return {
+		pageData :{},
 		processing : false,
+		currentStatus: STATUS_INITIAL,
 		imagesList:[
 			{id:1,photoTitle:'Registration Plate', overlayUrl:'/static/images/overlays/registration_plate.svg', overlayScale: '1',fObject:undefined},
 			{id:2,photoTitle:'Odometer', overlayUrl:'/static/images/overlays/odometer.svg', overlayScale: '1',fObject:undefined},
@@ -68,7 +79,8 @@ export default {
 			{id:6,photoTitle:'Rear Right', overlayUrl:'/static/images/overlays/sedan_rear_right.svg', overlayScale: '1.3',fObject:undefined},
 			{id:7,photoTitle:'Add More', overlayUrl:'/static/images/add.more.png', overlayScale: '1.3',lastImage:true,fObject:undefined} 			
 		  ],
-		imagesAdded:[]
+		imagesAdded:[],
+		uploadedImages:[]
 	  }
   },
   methods:{
@@ -103,32 +115,65 @@ export default {
 	},
 	submitImages(){
 	
-	//console.log(this.$f7.views.main.awsObject);
-	console.log(this.$root.awsObject);
+	//console.log(this.$root.awsObject);
 	
-	return ;
-		this.currentStatus = STATUS_SAVING;
+		this.currentStatus = STATUS_SAVING;	
+		var self = this;
 		
 		for(var i=0; i < this.imagesList.length; i++){
 			
 			var imageObj = this.imagesList[i];
 			if(imageObj.fname || undefined){
-				console.log(imageObj);
+				
+				  
+				  var albumPhotosKey = encodeURIComponent("first-aamc") + '/';
+
+				  var photoKey = albumPhotosKey + imageObj.fname;
+				  
+				  self.$root.s3Object.upload({
+					Key: photoKey,
+					Body: imageObj.fObject,
+					ACL: 'public-read'
+				  }, function(err, data) {
+					if (err) {
+						console.log(err);
+					  return alert('There was an error uploading your photo: ', err.message);
+					}
+					self.uploadedImages.push(imageObj.fname);
+				   // viewAlbum(albumName);
+				  });				
+				
+				
 			}
 			
 		}
 		
-		//console.log(this.imagesList);
+		
 	}
   },
   computed:{
 		
-		imageCount(){
-			//return "#"+this.name.toLowerCase().replace(/ /g,'-');
+		imageCount(){			
 			return this.imagesAdded.length;
+		},
+		uploadedCount(){			
+			return this.uploadedImages.length;
+		},	
+		isSaving() {
+			return this.currentStatus === STATUS_SAVING;
+		},
+		canUpload(){
+			return this.imagesAdded.length > 0;
+		},
+		finshedUpload(){
+			if(this.imagesAdded.length == this.uploadedImages.length){
+				this.currentStatus =STATUS_SUCCESS;
+			}
 		}
 		
-	}
+	},
+
+	
 }
 </script>
 <style>	  

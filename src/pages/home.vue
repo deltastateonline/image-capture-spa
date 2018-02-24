@@ -74,7 +74,6 @@
 <script>
 export default {
 
-
 	data(){	
 		return {		
 			page:{
