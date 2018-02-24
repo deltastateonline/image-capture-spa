@@ -42,6 +42,7 @@
 	  <f7-block strong>
 		  <f7-row>            
 			<f7-col width="100">
+			  <f7-button raised fill @click="submitImages">Submit Images</f7-button>
 			  <f7-button raised fill href="/thanku/">Submit Images</f7-button>
 			</f7-col>
 		  </f7-row>
@@ -50,19 +51,22 @@
 </template>
 
 <script>
+
+ const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
+ 
 export default {
 
  data(){
 	  return {
 		processing : false,
 		imagesList:[
-			{id:1,photoTitle:'Registration Plate', overlayUrl:'/static/images/overlays/registration_plate.svg', overlayScale: '1'},
-			{id:2,photoTitle:'Odometer', overlayUrl:'/static/images/overlays/odometer.svg', overlayScale: '1'},
-			{id:3,photoTitle:'Front Left', overlayUrl:'/static/images/overlays/sedan_front_left.svg', overlayScale: '1.5'},
-			{id:4,photoTitle:'Front Right', overlayUrl:'/static/images/overlays/sedan_front_right.svg', overlayScale: '1.5'},
-			{id:5,photoTitle:'Rear Left', overlayUrl:'/static/images/overlays/sedan_rear_left.svg', overlayScale: '1.3'},
-			{id:6,photoTitle:'Rear Right', overlayUrl:'/static/images/overlays/sedan_rear_right.svg', overlayScale: '1.3'},
-			{id:7,photoTitle:'Add More', overlayUrl:'/static/images/add.more.png', overlayScale: '1.3',lastImage:true} 			
+			{id:1,photoTitle:'Registration Plate', overlayUrl:'/static/images/overlays/registration_plate.svg', overlayScale: '1',fObject:undefined},
+			{id:2,photoTitle:'Odometer', overlayUrl:'/static/images/overlays/odometer.svg', overlayScale: '1',fObject:undefined},
+			{id:3,photoTitle:'Front Left', overlayUrl:'/static/images/overlays/sedan_front_left.svg', overlayScale: '1.5',fObject:undefined},
+			{id:4,photoTitle:'Front Right', overlayUrl:'/static/images/overlays/sedan_front_right.svg', overlayScale: '1.5',fObject:undefined},
+			{id:5,photoTitle:'Rear Left', overlayUrl:'/static/images/overlays/sedan_rear_left.svg', overlayScale: '1.3',fObject:undefined},
+			{id:6,photoTitle:'Rear Right', overlayUrl:'/static/images/overlays/sedan_rear_right.svg', overlayScale: '1.3',fObject:undefined},
+			{id:7,photoTitle:'Add More', overlayUrl:'/static/images/add.more.png', overlayScale: '1.3',lastImage:true,fObject:undefined} 			
 		  ],
 		imagesAdded:[]
 	  }
@@ -80,19 +84,41 @@ export default {
 				 anImage.overlayUrl = reader.result;
 				 
 				 if(anImage.lastImage != undefined && anImage.lastImage){	
-				 anImage.lastImage = false;
+					anImage.lastImage = false;
 					var id = self.imagesList.length + 1;
 					 self.imagesList.push(
-						{id:id, photoTitle:'Add More', overlayUrl:'/static/images/add.more.png', overlayScale: '1.3',lastImage:true}
+						{id:id, photoTitle:'Add More', overlayUrl:'/static/images/add.more.png', overlayScale: '1.3',lastImage:true,fObject:undefined}
 					 );				
 				 }
 				self.imagesAdded.push(1);
 				self.processing = false;
 			}
+			
+			anImage.fname = file.name;
+			anImage.fObject = file;
 			reader.readAsDataURL(file);
 			
 		}
 		
+	},
+	submitImages(){
+	
+	//console.log(this.$f7.views.main.awsObject);
+	console.log(this.$root.awsObject);
+	
+	return ;
+		this.currentStatus = STATUS_SAVING;
+		
+		for(var i=0; i < this.imagesList.length; i++){
+			
+			var imageObj = this.imagesList[i];
+			if(imageObj.fname || undefined){
+				console.log(imageObj);
+			}
+			
+		}
+		
+		//console.log(this.imagesList);
 	}
   },
   computed:{
