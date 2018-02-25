@@ -51,6 +51,7 @@ var mainApp = new Vue({
 		},
 		s3Object:{},
 		appData:{},
+		claimNumber:"second-aamc",
 	},
 	mounted(){	
 		

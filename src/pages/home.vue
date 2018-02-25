@@ -4,7 +4,7 @@
 	  <!--Top Menu -->
         <f7-navbar>          
           <f7-nav-title>
-			<img class="img-responsive center-block logo-img" src="https://aamc.adjustit.com.au/assets/img/logo/adjustit-plus.svg?v=20171116" alt="ADJUSTit+">
+			<img class="img-responsive center-block logo-img" src="static/images/adjustit-plus.svg?v=20171116" alt="ADJUSTit+">
 			<!--<img class="img-responsive center-block logo-img" src="/images/aamc.png" alt="AAMC">-->
 		  </f7-nav-title>
           <f7-nav-right>

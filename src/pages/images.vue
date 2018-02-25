@@ -3,7 +3,7 @@
   <f7-page>
       <f7-navbar  back-link="Back">
 		<f7-nav-title>
-			<img class="img-responsive center-block logo-img" src="https://aamc.adjustit.com.au/assets/img/logo/adjustit-plus.svg?v=20171116" alt="ADJUSTit+">
+			<img class="img-responsive center-block logo-img" src="static/images/adjustit-plus.svg?v=20171116" alt="ADJUSTit+">
 			<!--<img class="logo-img" src="/images/aamc.png" alt="AAMC">-->
 		</f7-nav-title>			
 			<div class="right">
@@ -36,23 +36,20 @@
 			</f7-swiper>
 
 		<f7-progressbar infinite color="green" v-if="processing"></f7-progressbar>			
-			<!--<f7-block-title >{{imageCount}} Images Added</f7-block-title>-->
+			
         </f7-block>
 	  
 	  
 	  <f7-block strong>
 		  <f7-row>            
-			<f7-col width="100">
-				
+			<f7-col width="100">				
 			  <f7-button raised fill @click="submitImages" v-if="!isSaving && canUpload">Submit Images</f7-button>
-			  
-			  <div>
-				<f7-preloader color="green" size="44px" v-if="isSaving"></f7-preloader>
+			  <div v-if="isSaving" class="preloader color-white"></div>
+			  <div v-if="isSaving" class="text-align-center">				
 				Uploading Please Wait ! {{uploadedCount}} of {{imageCount}} Uploaded
 			  </div>
-			  
-			  
 			  <!-- <f7-button raised fill href="/thanku/">Submit Images</f7-button> -->
+			  <div v-if="finshedUpload"></div>
 			</f7-col>
 		  </f7-row>
 	</f7-block>	  
@@ -80,7 +77,8 @@ export default {
 			{id:7,photoTitle:'Add More', overlayUrl:'/static/images/add.more.png', overlayScale: '1.3',lastImage:true,fObject:undefined} 			
 		  ],
 		imagesAdded:[],
-		uploadedImages:[]
+		uploadedImages:[],
+		hasErrors:[],
 	  }
   },
   methods:{
@@ -114,20 +112,19 @@ export default {
 		
 	},
 	submitImages(){
-	
-	//console.log(this.$root.awsObject);
-	
+			
+		this.$f7.preloader.show();	
 		this.currentStatus = STATUS_SAVING;	
 		var self = this;
+		
+		var myClaimNumber  = self.$root.claimNumber;
 		
 		for(var i=0; i < this.imagesList.length; i++){
 			
 			var imageObj = this.imagesList[i];
 			if(imageObj.fname || undefined){
-				
-				  
-				  var albumPhotosKey = encodeURIComponent("first-aamc") + '/';
-
+			
+				  var albumPhotosKey = encodeURIComponent(myClaimNumber) + '/';
 				  var photoKey = albumPhotosKey + imageObj.fname;
 				  
 				  self.$root.s3Object.upload({
@@ -135,20 +132,14 @@ export default {
 					Body: imageObj.fObject,
 					ACL: 'public-read'
 				  }, function(err, data) {
-					if (err) {
-						console.log(err);
-					  return alert('There was an error uploading your photo: ', err.message);
+					if (err) {						
+						self.hasErrors.push({filename:imageObj.fname, error:err.message});
+						return false;
 					}
-					self.uploadedImages.push(imageObj.fname);
-				   // viewAlbum(albumName);
-				  });				
-				
-				
-			}
-			
-		}
-		
-		
+					self.uploadedImages.push(i);				  
+				  });			
+			}			
+		}	
 	}
   },
   computed:{
@@ -166,11 +157,16 @@ export default {
 			return this.imagesAdded.length > 0;
 		},
 		finshedUpload(){
-			if(this.imagesAdded.length == this.uploadedImages.length){
-				this.currentStatus =STATUS_SUCCESS;
+			if(this.imagesAdded.length == this.uploadedImages.length && this.currentStatus == STATUS_SAVING){
+				this.currentStatus = STATUS_SUCCESS;
+				
+				this.$f7.preloader.hide();	
+
+				this.$f7Router.navigate("/thanku/");
+				return true;
 			}
-		}
-		
+			return false;
+		}		
 	},
 
 	
