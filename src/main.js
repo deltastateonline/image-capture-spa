@@ -48,8 +48,10 @@ var mainApp = new Vue({
 			albumBucketName:'deltastateonline-imageuploaded',
 			bucketRegion : 'ap-southeast-2',
 			IdentityPoolId : 'ap-southeast-2:77986df0-8003-44dc-b856-de5209c78add',
+			TopicArn: 'arn:aws:sns:ap-southeast-2:400646843302:imageuploaded_topic',
 		},
 		s3Object:{},
+		snsObject:{},
 		appData:{},
 		claimNumber:"second-aamc",
 	},
@@ -65,7 +67,8 @@ var mainApp = new Vue({
 		this.s3Object = new AWS.S3({
 		  apiVersion: '2006-03-01',
 		  params: {Bucket: this.awsObject.albumBucketName}
-		});		
+		});
+		this.snsObject = new AWS.SNS();		
 		
 	}	
 });

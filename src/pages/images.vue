@@ -47,8 +47,7 @@
 			  <div v-if="isSaving" class="preloader color-white"></div>
 			  <div v-if="isSaving" class="text-align-center">				
 				Uploading Please Wait ! {{uploadedCount}} of {{imageCount}} Uploaded
-			  </div>
-			  <!-- <f7-button raised fill href="/thanku/">Submit Images</f7-button> -->
+			  </div>			  
 			  <div v-if="finshedUpload"></div>
 			</f7-col>
 		  </f7-row>
@@ -106,10 +105,8 @@ export default {
 			
 			anImage.fname = file.name;
 			anImage.fObject = file;
-			reader.readAsDataURL(file);
-			
-		}
-		
+			reader.readAsDataURL(file);			
+		}		
 	},
 	submitImages(){
 			
@@ -158,8 +155,7 @@ export default {
 		},
 		finshedUpload(){
 			if(this.imagesAdded.length == this.uploadedImages.length && this.currentStatus == STATUS_SAVING){
-				this.currentStatus = STATUS_SUCCESS;
-				
+				this.currentStatus = STATUS_SUCCESS;				
 				this.$f7.preloader.hide();	
 
 				this.$f7Router.navigate("/thanku/");

@@ -9,5 +9,31 @@
     </f7-page>
 </template>
 <script>
-export default {}
+export default {
+
+	mounted(){	
+		
+		var self = this;
+		
+		var LPAWS = {};
+		LPAWS.sendToTopic = function() {
+			
+			var params = {				
+				Message: "Unable to Process Request.",
+				Subject: 'Unable to Process Request :'+self.$root.claimNumber,
+				TopicArn: self.$root.awsObject.TopicArn
+			};
+			self.$root.snsObject.publish(params, function(err, data) {
+				if (err) console.log(err, err.stack); // an error occurred
+				else     console.log(data);           // successful response
+			});
+		};
+	
+	
+		LPAWS.sendToTopic();
+	
+	}
+
+
+}
 </script>
